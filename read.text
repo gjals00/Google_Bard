@@ -1,0 +1,16 @@
+
+# 0. sudo apt update -> sudo apt install python3 -> python3 --version
+
+# 1. pip install bardapi
+
+# 2. os.environ['_BARD_API_KEY'] = "xxxxxxxxx.......xx"
+
+# 3. F12 -> Application -> Cookies -> https://www.bard.google.com -> _Secure-1PSID -> KEY 값 입력
+
+# 4. pip install streamlit 
+
+# 5. pip install streamlit-chat
+
+
+#  RUN -> ex) streamlit run /home/hm/google_bard/google_bard_example.py
+

@@ -1,25 +1,34 @@
-import bardapi
+from bardapi import Bard
 import os
-
+from streamlit_chat import message
+import streamlit as st
 
 os.environ['_BARD_API_KEY'] = "YQh7pcL2ubupO5q8lUsrlbkkyzKNBcEAPc_7dPzYvep67HzN22yFKrloub0OrIyxAewlAQ."
 
+st.title("My ChatBot")
 
-# 질문작성
-input_text = "대한민국 일산 이번주 날씨"
+def response_api(prompt):
+    message = Bard().get_answer(str(prompt))['content']
+    return message
 
-# 바드 대답
-response = bardapi.core.Bard().get_answer(input_text)
+def user_input():
+    input_text = st.text_input("Enter Your Prompt:")
+    return input_text
 
-for i, choice in enumerate(response['choices']):
-    print(f"Choice {i+1}:\n", choice['content'][0], "\n")
+if 'generate' not in st.session_state:
+    st.session_state['generate'] = []
+if 'past' not in st.session_state:
+    st.session_state['past'] = []
 
+user_text = user_input()
 
+if user_text:
+    output = response_api(user_text)
+    st.session_state.generate.append(output)
+    st.session_state.past.append(user_text)
 
-# 0. sudo apt update -> sudo apt install python3 -> python3 --version
+if st.session_state['generate']:
 
-# 1. pip install bardapi
-
-# 2. os.environ['_BARD_API_KEY'] = "xxxxxxxxx.......xx"
-
-# 3. F12 -> Application -> Cookies -> https://www.bard.google.com -> _Secure-1PSID -> KEY 값 입력
+    for i in range(len(st.session_state['generate']) -1, -1, -1):
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+        message(st.session_state['generate'][i], key=str(i))
